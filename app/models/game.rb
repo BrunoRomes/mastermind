@@ -1,10 +1,14 @@
 class Game < ActiveRecord::Base
+  has_secure_token :game_key
 
   DEFAULT_AMOUNT_OF_TURNS = 10
   MAX_AMOUNT_OF_TURNS = 25
   MAX_NUMBER_OF_PLAYERS = 10
   ALLOWED_COLORS = [ "R", "B", "G", "Y", "O", "P", "C", "M" ]
+  CODE_SIZE = 8
+  
   has_many :players
+  has_many :guesses
 
   enum status: {
     waiting_for_players_to_join: 0, playing: 1, finished: 2
@@ -19,15 +23,12 @@ class Game < ActiveRecord::Base
   before_validation :generate_code!
 
   def generate_game_key!
-    return if game_key.present?
-    # TODO: Generate
-    self.game_key = "ABC"
+    regenerate_game_key unless game_key.present?
   end
 
   def generate_code!
     return if code.present?
-    # TODO: Generate
-    self.code = "RBG"
+    self.code = allow_repetition? ? generate_code_allowing_repetition : generate_code_without_repetition
   end
 
   def set_status!
@@ -35,12 +36,17 @@ class Game < ActiveRecord::Base
     save!
   end
 
-  def game_ended?
-    finished? || current_turn == max_turns
+  def finish(winner)
+    self.winner = winner
+    self.status = :finished
   end
 
   def self.find_availables
     self.where(status: Game.statuses[:waiting_for_players_to_join])
+  end
+
+  def increase_turn
+    self.current_turn = (guesses.count / number_of_players).floor
   end
 
   private
@@ -53,5 +59,21 @@ class Game < ActiveRecord::Base
       return :playing if game_start?
       :waiting_for_players_to_join
     end
+
+    def game_ended?
+      finished? || current_turn == max_turns
+    end
+
+    def generate_code_allowing_repetition
+    rng = Random.new
+    (1..CODE_SIZE).reduce([]) do |array, int|
+      array << ALLOWED_COLORS[rng.rand(ALLOWED_COLORS.size)]
+      array
+    end.join
+  end
+
+  def generate_code_without_repetition
+    ALLOWED_COLORS.shuffle.join
+  end
 
 end

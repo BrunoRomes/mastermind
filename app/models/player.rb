@@ -1,6 +1,8 @@
 class Player < ActiveRecord::Base
+  has_secure_token :player_key
 
   belongs_to :game
+  has_many :guesses
 
   validates :player_key, uniqueness: true
   validates :player_key, :name, :game, presence: true
@@ -8,9 +10,11 @@ class Player < ActiveRecord::Base
   before_validation :generate_player_key!
 
   def generate_player_key!
-    return if player_key.present?
-    # TODO: Generate
-    self.player_key = "RBG"
+    regenerate_player_key unless player_key.present?
+  end
+
+  def guessed_this_turn?(turn)
+    guesses.count == turn
   end
 
 end
