@@ -11,7 +11,7 @@ describe Player do
       expect(player.errors).to include(:player_key)
     end
 
-    it "does not create a Game without name" do
+    it "does not create a Player without name" do
       player = build(:player, name: "")
       expect(player).to_not be_valid
       expect(player.errors).to include(:name)

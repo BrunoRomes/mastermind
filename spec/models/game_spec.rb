@@ -17,7 +17,7 @@ describe Game do
       expect(game.errors).to include(:number_of_players)
     end
 
-    it "does not create a Game with number of players hight than the max number allowed" do
+    it "does not create a Game with number of players higher than the max number allowed" do
       game = build(:game, number_of_players: Game::MAX_NUMBER_OF_PLAYERS + 1)
       expect(game).to_not be_valid
       expect(game.errors).to include(:number_of_players)
@@ -62,6 +62,17 @@ describe Game do
       expect(game.code).to eq "ABC"
     end
 
+    it "creates a code without repetition" do
+      game = build(:game, code: "", allow_repetition: false)
+      expect(game).to be_valid
+      expect(game.code.split("").uniq.size).to eq Game::ALLOWED_COLORS.size
+    end
+
+    it "creates a valid code with repetition" do
+      game = build(:game, code: "", allow_repetition: true)
+      expect(game).to be_valid
+    end
+
   end
 
   context "status" do
@@ -73,9 +84,9 @@ describe Game do
     end
 
     it "updates the status to playing when it is a multiplayer game and all players joined" do
-      game = create(:game, number_of_players: 2)
-      create(:player, game: game)
-      create(:player, game: game)
+      players_number = 2
+      game = create(:game, number_of_players: players_number)
+      players_number.times { create(:player, game: game) }
       game.set_status!
       expect(game.status).to eq :playing.to_s
     end

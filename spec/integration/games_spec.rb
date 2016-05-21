@@ -15,8 +15,9 @@ describe "Games api" do
       expect(response).to have_http_status(200)
       expect(json.size).to eq 1
 
-      expect_exact_json_keys(json[0], "game_key", "code_length", "status", "number_of_players", "max_turns", "current_turn", "allow_repetition", "colors", "free_slots")
+      expect_exact_json_keys(json[0], "game_key", "code_length", "status", "number_of_players", "max_turns", "current_turn", "allow_repetition", "colors", "free_slots", "players")
       expect_json_values_present(json[0], "game_key", "code_length", "status", "max_turns", "current_turn", "colors", "free_slots")
+      expect(json[0]["game_key"]).to eq @game_in_idle.game_key
     end
 
   end
@@ -24,23 +25,30 @@ describe "Games api" do
   context "Create Game" do
 
     it "successfully creates a Game" do
-      post "/games", attributes_for(:game).merge({player: "John Doe"}).to_json, json_headers
+      player_name = "John Doe"
+      post "/games", attributes_for(:game).merge({player: player_name}).to_json, json_headers
 
       expect(response).to have_http_status(201)
-      expect_exact_json_keys(json, "game_key", "code_length", "status", "number_of_players", "max_turns", "current_turn", "allow_repetition", "colors", "player_key")
-      expect_json_values_present(json, "game_key", "code_length", "status", "max_turns", "current_turn", "colors", "player_key")
+      expect_exact_json_keys(json, "game_key", "code_length", "status", "number_of_players", "max_turns", "current_turn", "allow_repetition", "colors", "player_key", "players", "my_guesses")
+      expect_json_values_present(json, "game_key", "code_length", "status", "max_turns", "current_turn", "colors", "player_key", "players")
+      expect(json["status"]).to eq "waiting_for_players_to_join"
+      expect(json["players"].size).to eq 1
+      expect(json["players"][0]).to eq player_name
     end
 
     it "successfully creates a singleplayer Game" do
-      post "/games", attributes_for(:game, number_of_players: 1).merge({player: "John Doe"}).to_json, json_headers
+      player_name = "John Doe"
+      post "/games", attributes_for(:game, number_of_players: 1).merge({player: player_name}).to_json, json_headers
 
       expect(response).to have_http_status(201)
-      expect_exact_json_keys(json, "game_key", "code_length", "status", "number_of_players", "max_turns", "current_turn", "allow_repetition", "colors", "player_key")
-      expect_json_values_present(json, "game_key", "code_length", "status", "max_turns", "current_turn", "colors", "player_key")
+      expect_exact_json_keys(json, "game_key", "code_length", "status", "number_of_players", "max_turns", "current_turn", "allow_repetition", "colors", "player_key", "players", "my_guesses")
+      expect_json_values_present(json, "game_key", "code_length", "status", "max_turns", "current_turn", "colors", "player_key", "players")
       expect(json["status"]).to eq "playing"
+      expect(json["players"].size).to eq 1
+      expect(json["players"][0]).to eq player_name
     end
 
-    it "does not create an invalid API" do
+    it "does not create an invalid Game" do
       post "/games", {}.to_json, json_headers
 
       expect(response).to have_http_status(422)
