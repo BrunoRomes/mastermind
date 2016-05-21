@@ -4,6 +4,7 @@ class Game < ActiveRecord::Base
   MAX_AMOUNT_OF_TURNS = 25
   MAX_NUMBER_OF_PLAYERS = 10
   ALLOWED_COLORS = [ "R", "B", "G", "Y", "O", "P", "C", "M" ]
+  has_many :players
 
   enum status: {
     waiting_for_players_to_join: 0, playing: 1, finished: 2
@@ -17,8 +18,6 @@ class Game < ActiveRecord::Base
   before_validation :generate_game_key!
   before_validation :generate_code!
 
-  before_save :update_status
-
   def generate_game_key!
     return if game_key.present?
     # TODO: Generate
@@ -31,7 +30,7 @@ class Game < ActiveRecord::Base
     self.code = "RBG"
   end
 
-  def update_status
+  def calculate_status!
     return if finished?
     if game_start?
       self.status = :playing
@@ -44,19 +43,13 @@ class Game < ActiveRecord::Base
     current_turn == max_turns
   end
 
-  def single_player?
-    number_of_players == 1
+  def self.find_availables
+    self.where(status: Game.statuses[:waiting_for_players_to_join])
   end
-
 
   private
     def game_start?
-      single_player? || all_players_joined?
-    end
-
-    def all_players_joined?
-      # TODO: Implement
-      false
+      players.size == number_of_players
     end
 
 end
