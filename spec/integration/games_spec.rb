@@ -89,7 +89,7 @@ describe "Games api" do
       post "/games", {}.to_json, json_headers
 
       expect(response).to have_http_status(422)
-      expect_exact_json_values_present(json, "max_turns")
+      expect_exact_json_values_present(json, "name")
     end
 
 

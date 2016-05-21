@@ -22,6 +22,7 @@ class Game < ActiveRecord::Base
 
   before_validation :generate_game_key!
   before_validation :generate_code!
+  before_validation :set_default_turns
 
   def generate_game_key!
     regenerate_game_key unless game_key.present?
@@ -30,6 +31,11 @@ class Game < ActiveRecord::Base
   def generate_code!
     return if code.present?
     self.code = allow_repetition? ? generate_code_allowing_repetition : generate_code_without_repetition
+  end
+
+  def set_default_turns
+    return if max_turns.present?
+    self.max_turns = DEFAULT_AMOUNT_OF_TURNS
   end
 
   def set_status!

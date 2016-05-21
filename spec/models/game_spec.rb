@@ -73,6 +73,12 @@ describe Game do
       expect(game).to be_valid
     end
 
+    it "sets the default amount of turns when it is not present" do
+      game = build(:game, max_turns: nil)
+      expect(game).to be_valid
+      expect(game.max_turns).to eq Game::DEFAULT_AMOUNT_OF_TURNS
+    end
+
   end
 
   context "status" do

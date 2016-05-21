@@ -33,9 +33,9 @@ This project consists of the following APIs:
     - Content-Type: application/json
 * Input: 
     - player: Name of the player creating the game;
-    - number_of_players: Number of people that will play the game. Defaults to 1;
+    - number_of_players: Number of people that will play the game. Defaults to `1`;
     - allow_repetition: Indicates if the code generated will have duplicated colors or not. Defaults to `false`;
-    - max_turns: The max number of guesses each player will have;
+    - max_turns: The max number of guesses each player will have. Defaults to `10`;
     - Example: `{ "player": "Player1", "number_of_players": 2, "allow_repetition": true, "max_turns": 10 }`
 * Output: check schema Game
 
@@ -49,8 +49,14 @@ This project consists of the following APIs:
     - Example: `/games/jHSZDdLHb3QpbRajXv9bzvCX`
 * Output: check schema Game
     - There are no guesses in this response, except when the game is over;
-    - Example: `{"game_key":"NApe9saManED9vcqUsCSmf1u","status":"playing","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"current_turn":1,"players":["GameMaster","John Doe"]}`
-    - Example of finished game: `{"game_key":"NApe9saManED9vcqUsCSmf1u","status":"finished","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"current_turn":11,"players":["GameMaster","John Doe"],"winner":null,"guesses":{"GameMaster":[{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"BBBBBBBB","exact":1,"near":0},{"code":"BBBBBBBB","exact":1,"near":0},{"code":"BBBBBBBB","exact":1,"near":0},{"code":"BBBBBBBB","exact":1,"near":0},{"code":"BBBBBBBB","exact":1,"near":0}],"John Doe":[{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0}]}}`
+    - Example:
+```
+{"game_key":"NApe9saManED9vcqUsCSmf1u","status":"playing","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"current_turn":1,"players":["GameMaster","John Doe"]}
+```
+    - Example of finished game:
+```
+{"game_key":"NApe9saManED9vcqUsCSmf1u","status":"finished","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"current_turn":11,"players":["GameMaster","John Doe"],"winner":null,"guesses":{"GameMaster":[{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"BBBBBBBB","exact":1,"near":0},{"code":"BBBBBBBB","exact":1,"near":0},{"code":"BBBBBBBB","exact":1,"near":0},{"code":"BBBBBBBB","exact":1,"near":0},{"code":"BBBBBBBB","exact":1,"near":0}],"John Doe":[{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0}]}}
+```
 
 
 ## GET /games/availables
@@ -59,7 +65,10 @@ This project consists of the following APIs:
     - Accept: application/json
 * Output: An array of available games. Check schema Game
     - free_slots: present only in this API, shows how many more players can enter a game;
-    - Example: `[{"game_key":"g3sqc3e22BARHDA45rj7Ad2T","status":"waiting_for_players_to_join","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"players":["GameMaster"],"free_slots":1}]`
+    - Example:
+```
+[{"game_key":"g3sqc3e22BARHDA45rj7Ad2T","status":"waiting_for_players_to_join","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"players":["GameMaster"],"free_slots":1}]
+```
 
 
 ## POST /games/:game_key/players
@@ -72,7 +81,10 @@ This project consists of the following APIs:
     - player: Name of the player joining the game;
     - Example: `{ "player": "John Doe" }`
 * Output: check schema Game
-    - Example: `{"game_key":"NApe9saManED9vcqUsCSmf1u","status":"playing","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"current_turn":1,"players":["GameMaster","John Doe"],"player_key":"sGXdaw2pPhG91NT7TincTtVZ","my_guesses":[]}`
+    - Example:
+```
+{"game_key":"NApe9saManED9vcqUsCSmf1u","status":"playing","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"current_turn":1,"players":["GameMaster","John Doe"],"player_key":"sGXdaw2pPhG91NT7TincTtVZ","my_guesses":[]}
+```
 
 
 ## POST /players/:player_key/guesses
@@ -85,7 +97,11 @@ This project consists of the following APIs:
     - code: Guess made by the player
     - Example: `{ "code": "RBGRBGRB" }`
 * Output: check schema Game
-    - Example: `{"game_key":"NApe9saManED9vcqUsCSmf1u","status":"playing","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"current_turn":3,"players":["GameMaster","John Doe"],"player_key":"nbRkoTYHdVyP6TyRb5jvmvCP","my_guesses":[{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0}]}`
+    - Example: 
+```
+{"game_key":"NApe9saManED9vcqUsCSmf1u","status":"playing","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"current_turn":3,"players":["GameMaster","John Doe"],"player_key":"nbRkoTYHdVyP6TyRb5jvmvCP","my_guesses":[{"code":"RRRRRRRR","exact":3,"near":0},{"code":"RRRRRRRR","exact":3,"near":0}]}
+```
+
 
 
 ## Schema Game
@@ -105,7 +121,8 @@ This project consists of the following APIs:
     - Example: `{"game_key":"9nUdqDBHp1X6SbuxsF3tZSfM","status":"playing","number_of_players":2,"max_turns":10,"allow_repetition":true,"code_length":8,"colors":["R","B","G","Y","O","P","C","M"],"current_turn":1,"players":["GameMaster","John Doe"],"player_key":"JewMZX8mYcrAS3iNMFsWewbh","my_guesses":[{"code":"MOMGYBRY","exact":2,"near":1}]}`
 
 
-
+# Jobs
+To avoid keeping old games open, after 5 minutes of inactivity the game will be closed. To do so, a job is being used. Whenever the game is updated, it schedules a job for the next 5 minutes, so it can check if there was any update during this time.
 
 
 
