@@ -1,4 +1,5 @@
 json.partial! 'games/game', game: @game
+json.extract! @game, :current_turn
 
 if @game.finished?
   json.extract! @game, :winner

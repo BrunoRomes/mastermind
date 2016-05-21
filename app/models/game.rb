@@ -38,6 +38,10 @@ class Game < ActiveRecord::Base
 
   def finish(winner)
     self.winner = winner
+    force_finish
+  end
+
+  def force_finish
     self.status = :finished
   end
 
@@ -49,6 +53,10 @@ class Game < ActiveRecord::Base
     self.current_turn = (guesses.count / number_of_players).floor + 1
   end
 
+  def game_ended?
+    finished? || current_turn > max_turns
+  end
+
   private
     def game_start?
       players.size == number_of_players
@@ -58,10 +66,6 @@ class Game < ActiveRecord::Base
       return :finished if game_ended?
       return :playing if game_start?
       :waiting_for_players_to_join
-    end
-
-    def game_ended?
-      finished? || current_turn == max_turns
     end
 
     def generate_code_allowing_repetition

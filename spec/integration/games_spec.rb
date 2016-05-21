@@ -15,8 +15,8 @@ describe "Games api" do
       expect(response).to have_http_status(200)
       expect(json.size).to eq 1
 
-      expect_exact_json_keys(json[0], "game_key", "code_length", "status", "number_of_players", "max_turns", "current_turn", "allow_repetition", "colors", "free_slots", "players")
-      expect_json_values_present(json[0], "game_key", "code_length", "status", "max_turns", "current_turn", "colors", "free_slots")
+      expect_exact_json_keys(json[0], "game_key", "code_length", "status", "number_of_players", "max_turns", "allow_repetition", "colors", "free_slots", "players")
+      expect_json_values_present(json[0], "game_key", "code_length", "status", "max_turns", "colors", "free_slots")
       expect(json[0]["game_key"]).to eq @game_in_idle.game_key
     end
 

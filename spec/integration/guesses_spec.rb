@@ -22,7 +22,7 @@ describe "Guesses api" do
       expect(json["current_turn"]).to eq (@game.current_turn+1)
     end
 
-    it "successfully end a game on a correct guess" do
+    it "successfully ends a game on a correct guess" do
       code = @game.code.split("").shuffle.join
       create(:guess, player: @player2, game: @game, code: code)
       code = @game.code
@@ -34,6 +34,22 @@ describe "Guesses api" do
       expect(json["status"]).to eq "finished"
       expect(json["winner"]).to eq @player1.name
       expect(json["current_turn"]).to eq 1
+      expect_exact_json_keys(json["guesses"], @player1.name, @player2.name)
+      expect(json["guesses"][@player1.name][0]["code"]).to eq code
+    end
+
+    it "successfully ends a game when the current turn tops the max turns" do
+      @game.update_attribute(:max_turns, 1)
+      code = @game.code.split("").shuffle.join
+      create(:guess, player: @player2, game: @game, code: code)
+      post "/players/#{@player1.player_key}/guesses", {code: code}.to_json, json_headers
+
+      expect(response).to have_http_status(201)
+      expect_exact_json_keys(json, "game_key", "code_length", "status", "number_of_players", "max_turns", "current_turn", "allow_repetition", "colors", "winner", "guesses")
+      expect_json_values_present(json, "game_key", "code_length", "status", "max_turns", "current_turn", "colors", "guesses")
+      expect(json["status"]).to eq "finished"
+      expect(json["winner"]).to be_nil
+      expect(json["current_turn"]).to eq 2
       expect_exact_json_keys(json["guesses"], @player1.name, @player2.name)
       expect(json["guesses"][@player1.name][0]["code"]).to eq code
     end
