@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "Games api" do
 
-  context "Get games" do
+  context "Get available games" do
     before do
       @game_in_idle = create(:game, status: :waiting_for_players_to_join)
       @game_in_execution = create(:game, status: :playing)
@@ -10,7 +10,7 @@ describe "Games api" do
     end
 
     it "successfully returns all available games" do
-      get "/games", {}, json_headers
+      get "/games/availables", {}, json_headers
 
       expect(response).to have_http_status(200)
       expect(json.size).to eq 1

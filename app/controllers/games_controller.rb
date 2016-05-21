@@ -1,7 +1,10 @@
 class GamesController < ApplicationController
 
-  def index
+  def availables
     @games = interactor.all_available
+    respond_to do |format|
+      format.json { render :index }
+    end
   end
 
   def show
