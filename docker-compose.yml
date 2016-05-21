@@ -2,7 +2,7 @@ version: '2'
 services:
   api:
     image: mastermind-api:v1
-    command: bundle exec foreman start'
+    command: bundle exec foreman start
     volumes:
       - .:/home/application
     ports:
