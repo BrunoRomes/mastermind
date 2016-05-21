@@ -4,11 +4,15 @@ class GamesController < ApplicationController
     @games = interactor.all_available
   end
 
+  def show
+    @game = interactor.get params[:id]
+  end
+
   def create
     @game = interactor.create(game_params)
     @player = @game.players.first
     respond_to do |format|
-      format.json { render :show, status: :created}
+      format.json { render :show_with_player, status: :created, location: game_url(@game.game_key)}
     end
   end
 

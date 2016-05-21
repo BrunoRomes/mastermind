@@ -21,6 +21,43 @@ describe "Games api" do
     end
 
   end
+
+  context "Get game" do
+
+    it "successfully returns an idle game" do
+      game = create(:game, status: :waiting_for_players_to_join)
+      get "/games/#{game.game_key}", {}, json_headers
+
+      expect(response).to have_http_status(200)
+
+      expect_exact_json_keys(json, "game_key", "code_length", "status", "number_of_players", "max_turns", "allow_repetition", "colors", "players", "current_turn")
+      expect_json_values_present(json, "game_key", "code_length", "status", "max_turns", "colors", "current_turn")
+      expect(json["game_key"]).to eq game.game_key
+    end
+
+    it "successfully returns a running game" do
+      game = create(:game, status: :playing)
+      get "/games/#{game.game_key}", {}, json_headers
+
+      expect(response).to have_http_status(200)
+
+      expect_exact_json_keys(json, "game_key", "code_length", "status", "number_of_players", "max_turns", "allow_repetition", "colors", "players", "current_turn")
+      expect_json_values_present(json, "game_key", "code_length", "status", "max_turns", "colors", "current_turn")
+      expect(json["game_key"]).to eq game.game_key
+    end
+
+    it "successfully returns a finished game" do
+      game = create(:game, status: :finished)
+      get "/games/#{game.game_key}", {}, json_headers
+
+      expect(response).to have_http_status(200)
+
+      expect_exact_json_keys(json, "game_key", "code_length", "status", "number_of_players", "max_turns", "allow_repetition", "colors", "current_turn", "players", "winner")
+      expect_json_values_present(json, "game_key", "code_length", "status", "max_turns", "colors", "current_turn")
+      expect(json["game_key"]).to eq game.game_key
+    end
+
+  end
   
   context "Create Game" do
 

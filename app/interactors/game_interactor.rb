@@ -7,9 +7,9 @@ class GameInteractor
   end
 
   def get(game_key)
-    # TODO: Lock
     game = Game.find_by game_key: game_key
     raise NotFoundError.new if game.nil?
+    game.lock!
     game
   end
 

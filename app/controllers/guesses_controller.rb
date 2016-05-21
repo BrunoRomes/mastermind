@@ -5,7 +5,7 @@ class GuessesController < ApplicationController
     @game = @player.game
     interactor.create(@player, @game, guess_params)
     respond_to do |format|
-      format.json { render "games/show", status: :created}
+      format.json { render "games/show_with_player", status: :created, location: game_url(@game.game_key)}
     end
   end
 

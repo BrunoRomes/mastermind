@@ -10,7 +10,6 @@ class Guess < ActiveRecord::Base
   def calculate_result!(game_code)
     calculate_exact(game_code)
     calculate_near(game_code)
-    # TODO: Implement
   end
 
   def correct?
