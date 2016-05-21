@@ -7,8 +7,9 @@ class GuessInteractor
       validate_play game, player
       fields[:player] = player
       fields[:game] = game
+      fields[:code].upcase!
       guess = Guess.new(fields)
-      guess.calculate_result(game.code)
+      guess.calculate_result!(game.code)
       guess.save! rescue raise ValidationError.new (guess.errors)
       
       game.finish(player.name) if guess.correct?

@@ -46,7 +46,7 @@ class Game < ActiveRecord::Base
   end
 
   def increase_turn
-    self.current_turn = (guesses.count / number_of_players).floor
+    self.current_turn = (guesses.count / number_of_players).floor + 1
   end
 
   private

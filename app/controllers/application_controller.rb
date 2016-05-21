@@ -18,19 +18,16 @@ class ApplicationController < ActionController::Base
     end
 
     def game_not_started_error
-      #TODO: Use i18n
       @error_messages = {game: ["has not started yet"]}
       render "validation_error.json", status: :unprocessable_entity
     end
 
     def game_ended_error
-      #TODO: Use i18n
       @error_messages = {game: ["has already ended"]}
       render "validation_error.json", status: :unprocessable_entity
     end
 
     def already_guessed_error
-      #TODO: Use i18n
       @error_messages = {guess: ["has already been sent this turn. Please wait for the other players to play in this turn"]}
       render "validation_error.json", status: :unprocessable_entity
     end

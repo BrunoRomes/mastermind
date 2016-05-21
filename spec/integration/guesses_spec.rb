@@ -18,7 +18,7 @@ describe "Guesses api" do
       expect(response).to have_http_status(201)
       expect_exact_json_keys(json, "game_key", "code_length", "status", "number_of_players", "max_turns", "current_turn", "allow_repetition", "colors", "player_key", "players", "my_guesses")
       expect_json_values_present(json, "game_key", "code_length", "status", "max_turns", "current_turn", "colors", "player_key", "players", "my_guesses")
-      expect(json["my_guesses"][0]["code"]).to eq guess_attributes[:code]
+      expect(json["my_guesses"][0]["code"]).to eq code
       expect(json["current_turn"]).to eq (@game.current_turn+1)
     end
 
@@ -34,7 +34,7 @@ describe "Guesses api" do
       expect(json["status"]).to eq "finished"
       expect(json["winner"]).to eq @player1.name
       expect(json["current_turn"]).to eq 1
-      expect_exact_json_keys(json["guesses"], @player1.name)
+      expect_exact_json_keys(json["guesses"], @player1.name, @player2.name)
       expect(json["guesses"][@player1.name][0]["code"]).to eq code
     end
 
