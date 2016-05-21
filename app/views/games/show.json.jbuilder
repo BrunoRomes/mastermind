@@ -1,4 +1,22 @@
-json.extract! @game, :game_key, :status, :number_of_players, :max_turns, :current_turn, :allow_repetition
-json.code_length @game.code.size
-json.colors Game::ALLOWED_COLORS
-json.extract! @player, :player_key
+json.partial! 'games/game', game: @game
+
+if @game.finished?
+  json.extract! @game, :winner
+  json.set! "guesses" do
+    @game.guesses.group_by(&:player).each do |player, guesses|
+      json.set! player.name do
+        json.array!(guesses) do |guess|
+          json.extract! guess, :code, :exact, :near
+        end
+      end
+    end
+
+  end
+else
+  json.extract! @player, :player_key
+  json.set! "my_guesses" do
+    json.array!(@player.guesses) do |guess|
+      json.extract! guess, :code, :exact, :near
+    end
+  end
+end
