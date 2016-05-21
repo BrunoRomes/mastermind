@@ -30,17 +30,13 @@ class Game < ActiveRecord::Base
     self.code = "RBG"
   end
 
-  def calculate_status!
-    return if finished?
-    if game_start?
-      self.status = :playing
-    else
-      self.status = :waiting_for_players_to_join
-    end
+  def set_status!
+    self.status = calculate_status
+    save!
   end
 
   def game_ended?
-    current_turn == max_turns
+    finished? || current_turn == max_turns
   end
 
   def self.find_availables
@@ -50,6 +46,12 @@ class Game < ActiveRecord::Base
   private
     def game_start?
       players.size == number_of_players
+    end
+
+    def calculate_status
+      return :finished if game_ended?
+      return :playing if game_start?
+      :waiting_for_players_to_join
     end
 
 end

@@ -68,7 +68,7 @@ describe Game do
     it "updates the status to playing when it is a singleplayer game" do
       game = create(:game, number_of_players: 1)
       create(:player, game: game)
-      game.calculate_status!
+      game.set_status!
       expect(game.status).to eq :playing.to_s
     end
 
@@ -76,14 +76,14 @@ describe Game do
       game = create(:game, number_of_players: 2)
       create(:player, game: game)
       create(:player, game: game)
-      game.calculate_status!
+      game.set_status!
       expect(game.status).to eq :playing.to_s
     end
 
     it "updates the status to waiting_for_players_to_join when it is a multiplayer game and all players joined" do
       game = create(:game, number_of_players: 2)
       create(:player, game: game)
-      game.calculate_status!
+      game.set_status!
       expect(game.status).to eq :waiting_for_players_to_join.to_s
     end
 

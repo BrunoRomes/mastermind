@@ -6,6 +6,10 @@ class GameInteractor
     Game.find_availables
   end
 
+  def get(game_key)
+    Game.find_by game_key: game_key
+  end
+
   def create(fields)
     Game.transaction do
       player_name = fields[:player]
@@ -13,7 +17,6 @@ class GameInteractor
       game = Game.new(fields)
       game.save! rescue raise ValidationError.new (game.errors)
       player_interactor.create(game, player_name)
-      game.calculate_status!
       game
     end
   end
