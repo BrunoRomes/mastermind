@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
 
   def index
-    @games = interactor.all_available()
+    @games = interactor.all_available
   end
 
   def create

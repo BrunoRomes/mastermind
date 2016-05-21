@@ -7,7 +7,9 @@ class GameInteractor
   end
 
   def get(game_key)
-    Game.find_by game_key: game_key
+    game = Game.find_by game_key: game_key
+    raise NotFoundError.new if game.nil?
+    game
   end
 
   def create(fields)
