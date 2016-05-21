@@ -77,7 +77,9 @@ CREATE TABLE guesses (
     player_id integer,
     exact integer DEFAULT 0,
     near integer DEFAULT 0,
-    code character varying
+    code character varying,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -108,7 +110,9 @@ CREATE TABLE players (
     id integer NOT NULL,
     player_key character varying,
     name character varying,
-    game_id integer
+    game_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
