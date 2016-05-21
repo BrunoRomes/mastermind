@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160521053633) do
+ActiveRecord::Schema.define(version: 20160521122700) do
 
   create_table "games", force: :cascade do |t|
     t.string  "game_key"
@@ -19,11 +19,24 @@ ActiveRecord::Schema.define(version: 20160521053633) do
     t.integer "number_of_players", default: 1
     t.integer "status",            default: 0
     t.integer "max_turns"
-    t.integer "current_turn",      default: 0
+    t.integer "current_turn",      default: 1
     t.boolean "allow_repetition",  default: false
+    t.string  "winner"
   end
 
   add_index "games", ["game_key"], name: "index_games_on_game_key"
+  add_index "games", ["status"], name: "index_games_on_status"
+
+  create_table "guesses", force: :cascade do |t|
+    t.integer "game_id"
+    t.integer "player_id"
+    t.integer "exact",     default: 0
+    t.integer "near",      default: 0
+    t.string  "code"
+  end
+
+  add_index "guesses", ["game_id"], name: "index_guesses_on_game_id"
+  add_index "guesses", ["player_id"], name: "index_guesses_on_player_id"
 
   create_table "players", force: :cascade do |t|
     t.string  "player_key"
