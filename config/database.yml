@@ -5,21 +5,28 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: sqlite3
+  adapter: postgresql
+  encoding: utf-8
   pool: 5
   timeout: 5000
 
-development:
+development_default: &development_default
   <<: *default
-  database: db/development.sqlite3
+  <% if ENV['IS_REMOTE_DATABASE'] %>
+  username: <%= ENV['DATABASE_USER_NAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  host: <%= ENV['DATABASE_HOST'] || "localhost" %>
+  <% end %>
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
+development:
+  <<: *development_default
+  database: <%= ENV['DATABASE_NAME'] || "mastermind-api" %>
+
 test:
-  <<: *default
-  database: db/test.sqlite3
+  <<: *development_default
+  database: <%= ENV['DATABASE_NAME'] || "mastermind-api" %>test<%= ENV['TEST_ENV_NUMBER'] %>
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  url: <%= ENV['DATABASE_URL'] %>
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>

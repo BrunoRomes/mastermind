@@ -5,7 +5,7 @@ class CreatePlayer < ActiveRecord::Migration
       t.string :name
       t.references :game, index: true
 
-      t.timestamp
+      t.timestamps
     end
   end
 end

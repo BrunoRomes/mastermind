@@ -6,6 +6,8 @@ class CreateGuess < ActiveRecord::Migration
       t.integer :exact, default: 0
       t.integer :near, default: 0
       t.string :code
+
+      t.timestamps
     end
   end
 end

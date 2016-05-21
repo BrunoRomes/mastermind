@@ -6,11 +6,12 @@ The challenge consists on creating an API that allows creation of mastermind gam
 # Requirements for local execution
 * Ruby 2.3.0
 * Rails 4.2.6
+* Postgresql
 
 # Executing on local machine
 1. `gem install bundler`
 2. `bundle install`
-3. `rails s -b 0.0.0.0 -p 3000`
+3. `foreman start`
 
 # Requirements for docker execution
 * Docker v1.11.1 or higher

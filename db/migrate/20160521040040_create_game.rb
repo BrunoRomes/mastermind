@@ -10,7 +10,7 @@ class CreateGame < ActiveRecord::Migration
       t.boolean :allow_repetition, default: false
       t.string :winner
 
-      t.timestamp
+      t.timestamps
     end
   end
 end

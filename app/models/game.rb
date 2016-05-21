@@ -6,6 +6,7 @@ class Game < ActiveRecord::Base
   MAX_NUMBER_OF_PLAYERS = 10
   ALLOWED_COLORS = [ "R", "B", "G", "Y", "O", "P", "C", "M" ]
   CODE_SIZE = 8
+  MAX_INACTIVITY_TIME = 5.minutes
   
   has_many :players
   has_many :guesses
