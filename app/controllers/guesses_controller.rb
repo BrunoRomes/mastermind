@@ -1,7 +1,25 @@
 class GuessesController < ApplicationController
 
   def create
-    #TODO: create controller
+    @player = player_interactor.get(params[:player_id])
+    @game = @player.game
+    interactor.create(@player, @game, guess_params)
+    respond_to do |format|
+      format.json { render "games/show", status: :created}
+    end
   end
+
+  private
+    def interactor
+      GuessInteractor.instance
+    end
+
+    def player_interactor
+      PlayerInteractor.instance
+    end
+
+    def guess_params
+      params.permit(:code)
+    end
 
 end
