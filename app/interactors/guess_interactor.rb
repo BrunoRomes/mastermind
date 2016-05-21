@@ -17,7 +17,7 @@ class GuessInteractor
   private
     def validate_play(game, player)
       raise GameNotStartedError.new if game.waiting_for_players_to_join?
-      raise GameEndedError.new if game.finished?
+      raise GameEndedError.new(game.game_key) if game.finished?
       raise AlreadyGuessedError.new if player.guessed_this_turn?(game.current_turn)
     end
 

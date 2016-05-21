@@ -12,8 +12,8 @@ class ApplicationController < ActionController::Base
 
   private
 
-    def validation_error(e)
-      @error_messages = e.errors.to_hash
+    def validation_error(exception)
+      @error_messages = exception.errors.to_hash
       render "validation_error.json", status: :unprocessable_entity
     end
 
@@ -22,8 +22,8 @@ class ApplicationController < ActionController::Base
       render "validation_error.json", status: :unprocessable_entity
     end
 
-    def game_ended_error
-      @error_messages = {game: ["has already ended"]}
+    def game_ended_error(exception)
+      @error_messages = {game: ["has already ended. Please move to #{game_url(exception.game_key)} to check the game summary"]}
       render "validation_error.json", status: :unprocessable_entity
     end
 
