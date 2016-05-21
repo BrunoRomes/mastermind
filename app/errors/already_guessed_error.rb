@@ -1,0 +1,2 @@
+class AlreadyGuessedError < StandardError
+end

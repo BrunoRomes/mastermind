@@ -5,12 +5,40 @@ class ApplicationController < ActionController::Base
 
   rescue_from ValidationError, with: :validation_error
   rescue_from CannotJoinError, with: :cannot_join_error
+  rescue_from NotFoundError, with: :not_found_error
+  rescue_from GameNotStartedError, with: :game_not_started_error
+  rescue_from GameEndedError, with: :game_ended_error
+  rescue_from AlreadyGuessedError, with: :already_guessed_error
 
   private
 
     def validation_error(e)
-      @error_messages = e.errors
+      @error_messages = e.errors.to_hash
       render "validation_error.json", status: :unprocessable_entity
+    end
+
+    def game_not_started_error
+      #TODO: Use i18n
+      @error_messages = {game: ["has not started yet"]}
+      render "validation_error.json", status: :unprocessable_entity
+    end
+
+    def game_ended_error
+      #TODO: Use i18n
+      @error_messages = {game: ["has already ended"]}
+      render "validation_error.json", status: :unprocessable_entity
+    end
+
+    def already_guessed_error
+      #TODO: Use i18n
+      @error_messages = {guess: ["has already been sent this turn. Please wait for the other players to play in this turn"]}
+      render "validation_error.json", status: :unprocessable_entity
+    end
+
+    def not_found_error
+      respond_to do |format|
+        format.any(:json,:xml,:html) { head :not_found }
+      end
     end
 
     def cannot_join_error

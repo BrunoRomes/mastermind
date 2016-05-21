@@ -1,0 +1,2 @@
+class GameNotStartedError < StandardError
+end
