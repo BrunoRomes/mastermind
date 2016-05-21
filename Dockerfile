@@ -1,5 +1,6 @@
 FROM ruby:2.3.0
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
+RUN apt-get install -y graphviz
 WORKDIR /home/application
 ADD Gemfile /Gemfile
 ADD Gemfile.lock /Gemfile.lock
