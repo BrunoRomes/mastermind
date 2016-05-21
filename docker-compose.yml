@@ -2,8 +2,22 @@ version: '2'
 services:
   api:
     image: mastermind-api:v1
-    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    command: bundle exec foreman start'
     volumes:
       - .:/home/application
     ports:
       - "3000:3000"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_HOST=postgres
+      - IS_REMOTE_DATABASE=true
+      - DATABASE_USER_NAME=postgres
+      - DATABASE_PASSWORD="12345678"
+      - DATABASE_NAME=mastermind-api
+  postgres:
+    image: postgres:9.4
+    environment:
+      - POSTGRES_PASSWORD=12345678
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
