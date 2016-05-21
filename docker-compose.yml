@@ -1,0 +1,8 @@
+version: '2'
+services:
+  api:
+    image: mastermind-api:v1
+    volumes:
+      - .:/home/application
+    ports:
+      - "3000:3000"

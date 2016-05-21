@@ -25,10 +25,10 @@ group :development, :test do
   gem 'pry-byebug', platform: :ruby
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  gem 'rspec', '~> 3.4.0'
-  gem 'rspec-rails', '~> 3.4.0'
-  gem 'rspec-mocks', '~> 3.4.0'
-  gem 'factory_girl_rails', '~> 4.5.0', require: false
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'rspec-mocks'
+  gem 'factory_girl_rails', require: false
   gem 'database_cleaner'
 end
 
