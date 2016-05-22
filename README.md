@@ -125,6 +125,14 @@ This project consists of the following APIs:
 To avoid keeping old games open, after 5 minutes of inactivity the game will be closed. To do so, a job is being used. Whenever the game is updated, it schedules a job for the next 5 minutes, so it can check if there was any update during this time.
 
 
+# Trying it out
+This application is currently hosted on Heroku. To test it, use the url `https://mastermind-challenge.herokuapp.com`
+
+
+# Testing the code
+To test the code, use the command `rspec spec`
+
+
 
 
 

@@ -22,16 +22,19 @@ class Guess < ActiveRecord::Base
     end
 
     def calculate_near(game_code)
+      # Using an array of colors of the guess, it is then transformed into a hash where the key is the color and the value is the number of occurencies in the code
       code_occurrencies = code.split("").reduce(Hash.new(0)) {|hash, element| hash[element] += 1; hash}
-      self.near = code_occurrencies.reduce(0) do |near, (color, occurrencies)|
+      # Calulates the matches of colors without worrying about the positions
+      matches = code_occurrencies.reduce(0) do |matches, (color, occurrencies)|
         game_code_color_count = game_code.count(color)
-        near += game_code_color_count if game_code_color_count > 0 && occurrencies > game_code_color_count
-        near += occurrencies if game_code_color_count > 0 && occurrencies <= game_code_color_count
-        near
+        matches += game_code_color_count if game_code_color_count > 0 && occurrencies > game_code_color_count
+        matches += occurrencies if game_code_color_count > 0 && occurrencies <= game_code_color_count
+        matches
       end
 
-      self.near -= self.exact
-      self.near = 0 if self.near < 0
+      # Removes the exact amount, since they are in the correct position
+      self.near = matches - self.exact
+      
     end
 
 end
