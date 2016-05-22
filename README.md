@@ -126,7 +126,8 @@ To avoid keeping old games open, after 5 minutes of inactivity the game will be 
 
 
 # Trying it out
-This application is currently hosted on Heroku. To test it, use the url `https://mastermind-challenge.herokuapp.com`
+This application is currently hosted on Heroku. To test it, use the url `https://mastermind-challenge.herokuapp.com` in combination with the paths posted above.
+Please note that the free account of Heroku allows only one active dyno at a time. Because of this, the games are not being closed due to inactivity. When testing locally, though, this works as intended.
 
 
 # Testing the code
