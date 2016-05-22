@@ -35,7 +35,7 @@ This project consists of the following APIs:
     - player: Name of the player creating the game;
     - number_of_players: Number of people that will play the game. Defaults to `1`;
     - allow_repetition: Indicates if the code generated will have duplicated colors or not. Defaults to `false`;
-    - max_turns: The max number of guesses each player will have. Defaults to `10`;
+    - max_turns: The max number of guesses each player will have. If it isn't present, the game will run on endless mode;
     - Example: `{ "player": "Player1", "number_of_players": 2, "allow_repetition": true, "max_turns": 10 }`
 * Output: check schema Game
 

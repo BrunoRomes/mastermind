@@ -29,10 +29,9 @@ describe Game do
       expect(game.errors).to include(:max_turns)
     end
 
-    it "does not create a Game with max number of turns hight than the max number allowed" do
-      game = build(:game, max_turns: Game::MAX_AMOUNT_OF_TURNS + 1)
-      expect(game).to_not be_valid
-      expect(game.errors).to include(:max_turns)
+    it "creates a game without max number of turns" do
+      game = build(:game, max_turns: nil)
+      expect(game).to be_valid
     end
 
   end
@@ -73,10 +72,12 @@ describe Game do
       expect(game).to be_valid
     end
 
-    it "sets the default amount of turns when it is not present" do
-      game = build(:game, max_turns: nil)
+    it "always updates the 'updated_at' field" do
+      game = create(:game)
+      first_update = game.updated_at
       expect(game).to be_valid
-      expect(game.max_turns).to eq Game::DEFAULT_AMOUNT_OF_TURNS
+      game.save! # Saved without changing anything originally wouldn`t update the 'updated_at' field
+      expect(game.updated_at > first_update).to be_truthy
     end
 
   end

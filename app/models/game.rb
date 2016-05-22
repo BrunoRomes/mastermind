@@ -18,30 +18,11 @@ class Game < ActiveRecord::Base
   validates :game_key, uniqueness: true
   validates :game_key, :code, presence: true
   validates :number_of_players, inclusion: { in: 1..MAX_NUMBER_OF_PLAYERS }
-  validates :max_turns, inclusion: { in: 1..MAX_AMOUNT_OF_TURNS }
+  validates :max_turns, numericality: { only_integer: true, greater_than: 0 }, if: Proc.new { |game| game.max_turns.present? }
 
   before_validation :generate_game_key!
   before_validation :generate_code!
-  before_validation :set_default_turns
   before_save :always_touch
-
-  def always_touch
-    self.updated_at = Time.now
-  end
-
-  def generate_game_key!
-    regenerate_game_key unless game_key.present?
-  end
-
-  def generate_code!
-    return if code.present?
-    self.code = allow_repetition? ? generate_code_allowing_repetition : generate_code_without_repetition
-  end
-
-  def set_default_turns
-    return if max_turns.present?
-    self.max_turns = DEFAULT_AMOUNT_OF_TURNS
-  end
 
   def set_status!
     self.status = calculate_status
@@ -66,7 +47,7 @@ class Game < ActiveRecord::Base
   end
 
   def game_ended?
-    finished? || current_turn > max_turns
+    finished? || reached_max_turns?
   end
 
   private
@@ -90,6 +71,23 @@ class Game < ActiveRecord::Base
 
   def generate_code_without_repetition
     ALLOWED_COLORS.shuffle.join
+  end
+
+  def reached_max_turns?
+    max_turns.present? && current_turn > max_turns
+  end
+
+  def always_touch
+    self.updated_at = Time.now
+  end
+
+  def generate_game_key!
+    regenerate_game_key unless game_key.present?
+  end
+
+  def generate_code!
+    return if code.present?
+    self.code = allow_repetition? ? generate_code_allowing_repetition : generate_code_without_repetition
   end
 
 end
