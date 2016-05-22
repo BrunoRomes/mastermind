@@ -23,6 +23,11 @@ class Game < ActiveRecord::Base
   before_validation :generate_game_key!
   before_validation :generate_code!
   before_validation :set_default_turns
+  before_save :always_touch
+
+  def always_touch
+    self.updated_at = Time.now
+  end
 
   def generate_game_key!
     regenerate_game_key unless game_key.present?
